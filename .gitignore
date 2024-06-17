@@ -1,0 +1,5 @@
+*terraform*
+.terraform.lock.hcl
+!terraform.tf
+*.pem
+key-aws.pem:Zone.Identifier
