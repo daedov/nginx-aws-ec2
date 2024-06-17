@@ -1,6 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        PRIVATE_KEY_AWS = credentials('PRIVATE_KEY_AWS')
+    }
+
+
     stages {
         stage('Checkout') {
             steps {
@@ -20,16 +27,16 @@ pipeline {
             }
         }
 
-        stage('Terraform Plan') {
-            steps {
-                sh 'terraform plan -input=false -out=tfplan'
+        stage('Terraform Apply') {
+            withCredentials([file(credentialsId: ' PRIVATE_KEY_AWS ')]) {
+            sh 'terraform apply -auto-approve'
             }
         }
-
-        stage('Terraform Apply') {
-            steps {
-                sh 'terraform apply -input=false -auto-approve'
-            }
+    }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: '**/*.tfstate', allowEmptyArchive: true
         }
     }
 
