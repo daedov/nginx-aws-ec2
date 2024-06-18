@@ -1,6 +1,6 @@
 # Desafío 1
 
-Configurar un pipeline de Jenkins que automatice el despliegue de un servidor en AWS con NGINX usando Terraform. El servidor debe servir una pagina web simple con el mensaje “Hello World”
+Configurar un pipeline de Jenkins que automatice el despliegue de un servidor en AWS con NGINX usando Terraform. El servidor debe servir una página web simple con el mensaje “Hello World”
 
 ### Pre-requisitos 
 -	Cuenta de AWS con permisos necesarios para crear instancias EC2 y otros recursos asociados 
