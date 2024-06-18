@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'feature/jenkins', url: 'https://github.com/daedov/nginx-aws-ec2'
+                git branch: 'develop', url: 'https://github.com/daedov/nginx-aws-ec2'
             }
         }
 
@@ -19,8 +19,6 @@ pipeline {
                     sh '''
                         cp $KEY_FILE ./key-aws.pem
                         chmod 600 ./key-aws.pem
-                        ls -l ./key-aws.pem
-                        cat ./key-aws.pem
                     '''
                 }
             }
