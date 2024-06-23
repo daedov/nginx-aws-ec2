@@ -15,42 +15,54 @@ pipeline {
 
         stage('Prepare SSH Key') {
             steps {
-                withCredentials([file(credentialsId: 'PRIVATE_KEY_AWS', variable: 'KEY_FILE')]) {
-                    sh 'cp $KEY_FILE ./key-aws.pem'
-                }
+                dir('ec2') {
+                    withCredentials([file(credentialsId: 'PRIVATE_KEY_AWS', variable: 'KEY_FILE')]) {
+                        sh 'cp $KEY_FILE ./key-aws.pem'
+                    }
+                }    
             }
         }
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                dir('ec2') {
+                    sh 'terraform init'
+                }    
             }
         }
 
         stage('Terraform fmt') {
             steps {
-                sh 'terraform fmt'
+                dir('ec2') {
+                    sh 'terraform fmt'
+                }
             }
         }
 
         stage('Terraform plan') {
             steps {
-                sh 'terraform plan'
+                dir('ec2') {
+                    sh 'terraform plan'
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform apply -auto-approve'
+                dir('ec2') {
+                    withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh 'terraform apply -auto-approve'
+                    }
                 }
             }
         }
         
         stage('Terraform Destroy') {
             steps {
-                withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform destroy -auto-approve'
+                dir('ec2') {
+                    withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh 'terraform destroy -auto-approve'
+                    }
                 }
             }
         }
