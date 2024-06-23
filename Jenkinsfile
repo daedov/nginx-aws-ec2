@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/daedov/nginx-aws-ec2'
+                git branch: 'develop', url: 'https://github.com/daedov/nginx-aws-ec2'
             }
         }
 
