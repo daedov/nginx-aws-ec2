@@ -1,0 +1,5 @@
+aws_region          = "us-east-1"
+ami_id              = "ami-08a0d1e16fc3f61ea"
+instance_type       = "t2.micro"
+security_group_name = "nginx-allow-http"
+key_name            = "key-aws"

@@ -1,19 +1,15 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 resource "aws_instance" "nginx" {
-  ami                    = "ami-08a0d1e16fc3f61ea"
-  instance_type          = "t2.micro"
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.allow_http.id]
-  key_name               = "key-aws"
+  key_name               = var.key_name
 
   tags = {
     Name = "Nginx Server"
   }
 
   provisioner "file" {
-    source      = "./index.html"
+    source      = "./src/index.html"
     destination = "/home/ec2-user/index.html"
 
     connection {
@@ -53,7 +49,7 @@ resource "aws_default_vpc" "vpc" {
 
 resource "aws_security_group" "allow_http" {
   vpc_id = aws_default_vpc.vpc.id
-  name   = "nginx-allow-http"
+  name   = var.security_group_name
 
   ingress {
     from_port   = 22
