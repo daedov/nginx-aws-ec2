@@ -9,3 +9,5 @@ Configurar un pipeline de Jenkins que automatice el despliegue de un servidor en
 -	AWS CLI configurada en el servidor donde se ejecuta Jenkins
 -	Acceso a las credenciales de AWS en Jenkins 
 
+### Diagrama del desafío 
+![](./img/ec2-diagram.png)

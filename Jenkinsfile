@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'develop', url: 'https://github.com/daedov/nginx-aws-ec2'
+                git 'https://github.com/daedov/nginx-aws-ec2'
             }
         }
 
@@ -35,14 +35,14 @@ pipeline {
 
         stage('Terraform plan') {
             steps {
-                sh 'terraform plan'
+                sh 'terraform plan -out=plan.out'
             }
         }
 
         stage('Terraform Apply') {
             steps {
                 withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-                    sh 'terraform apply -auto-approve'
+                    sh 'terraform apply plan.out'
                 }
             }
         }
