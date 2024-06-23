@@ -1,4 +1,4 @@
-*terraform*
+*terraform.tfstate*
 .terraform.lock.hcl
 !terraform.tf
 *.pem
