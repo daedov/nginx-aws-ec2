@@ -9,7 +9,7 @@ resource "aws_instance" "nginx" {
   }
 
   provisioner "file" {
-    source      = "./src/index.html"
+    source      = "../src/index.html"
     destination = "/home/ec2-user/index.html"
 
     connection {
