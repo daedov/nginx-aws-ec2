@@ -47,45 +47,29 @@ pipeline {
             }
         }
 
-        stage('Terraform Apply') {
+        stage('User Decision') {
             steps {
                 script {
-                    def applyDecision = input(
-                        id: 'applyDecision', message: 'Do you want to apply Terraform changes?', parameters: [
-                            choice(choices: ['Yes', 'No'], description: 'Choose whether to proceed with Terraform apply', name: 'continue')
+                    def userDecision = input(
+                        id: 'userDecision', message: 'What do you want to do with Terraform?', parameters: [
+                            choice(choices: ['Apply', 'Destroy', 'Cancel'], description: 'Choose whether to apply or destroy Terraform resources', name: 'action')
                         ]
                     )
 
-                    if (applyDecision == 'Yes') {
+                    if (userDecision == 'Apply') {
                         dir('ec2') {
                             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
                                 sh 'terraform apply -auto-approve plan.out'
                             }
                         }
-                    } else {
-                        echo 'Terraform apply was cancelled by the user.'
-                    }
-                }
-            }
-        }
-
-        stage('Terraform Destroy') {
-            steps {
-                script {
-                    def destroyDecision = input(
-                        id: 'destroyDecision', message: 'Do you want to destroy Terraform resources?', parameters: [
-                            choice(choices: ['Yes', 'No'], description: 'Choose whether to proceed with Terraform destroy', name: 'continue')
-                        ]
-                    )
-
-                    if (destroyDecision == 'Yes') {
+                    } else if (userDecision == 'Destroy') {
                         dir('ec2') {
                             withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
                                 sh 'terraform destroy -auto-approve'
                             }
                         }
                     } else {
-                        echo 'Terraform destroy was cancelled by the user.'
+                        echo 'Terraform action was cancelled by the user.'
                     }
                 }
             }
