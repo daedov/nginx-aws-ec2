@@ -42,7 +42,7 @@ pipeline {
         stage('Terraform plan') {
             steps {
                 dir('ec2') {
-                    sh 'terraform plan'
+                    sh 'terraform plan -out=plan.out'
                 }
             }
         }
@@ -51,7 +51,7 @@ pipeline {
             steps {
                 dir('ec2') {
                     withCredentials([string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        sh 'terraform apply -auto-approve'
+                        sh 'terraform apply -auto-approve plan.out'
                     }
                 }
             }

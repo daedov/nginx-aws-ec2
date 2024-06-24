@@ -22,7 +22,7 @@ resource "aws_instance" "nginx" {
 
   provisioner "remote-exec" {
     inline = [
-      "sudo yum update -y",
+      "sudo yum update",
       "sudo yum install -y nginx",
       "sudo systemctl start nginx",
       "sudo systemctl enable nginx",
