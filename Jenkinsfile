@@ -17,7 +17,7 @@ pipeline {
             steps {
                 dir('ec2') {
                     withCredentials([file(credentialsId: 'PRIVATE_KEY_AWS', variable: 'KEY_FILE')]) {
-                        sh 'cp $KEY_FILE ./key-aws.pem'
+                        sh 'cp $KEY_FILE $WORKSPACE/key-aws.pem'
                     }
                 }    
             }
@@ -71,7 +71,7 @@ pipeline {
     post {
         always {
             archiveArtifacts artifacts: '**/*.tfstate', allowEmptyArchive: true
-            sh 'rm -f ./key-aws.pem'
+            sh 'rm -f $WORKSPACE/key-aws.pem'
         }
     }
 }
