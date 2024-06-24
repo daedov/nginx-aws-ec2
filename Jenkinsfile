@@ -72,6 +72,7 @@ pipeline {
         always {
             archiveArtifacts artifacts: '**/*.tfstate', allowEmptyArchive: true
             sh 'rm -f ./key-aws.pem'
+            cleanWs()
         }
     }
 }
